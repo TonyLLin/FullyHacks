@@ -12,7 +12,7 @@ from app.services import nominatim_service
 from app.services.nominatim_service import DEFAULT_SEARCH_LIMIT
 from app.utils.geocoding_http import jsonify_or_nominatim_errors
 
-app = Flask(__name__, static_folder="../frontend/src", static_url_path="")
+app = Flask(__name__, static_folder="../frontend/build", static_url_path="")
 
 CORS(app,
     resources={r"/*": {"origins": ["http://localhost:3000", "http://localhost:5000", "http://localhost:8000"]}},
