@@ -1,0 +1,868 @@
+:root {
+    /* Foam & Tide — deep ocean dark mode */
+    --bg: #06151E;            /* abyssal black */
+    --surface: #0C2230;       /* deep harbor */
+    --surface-2: #0F2A3B;     /* slightly elevated */
+    --surface-hover: #163445; /* hover lift */
+    --divider: #1A3A4D;
+    --divider-strong: #234B61;
+
+    --ink: #E6F1F4;           /* foam white - primary text */
+    --ink-2: #B5CCD4;         /* surf */
+    --ink-3: #7FA1AE;         /* muted seawater */
+    --ink-4: #557682;         /* deep mist */
+
+    --accent: #39b3a5;        /* bioluminescent teal - CTA */
+    --accent-hover: #5EE3D3;
+    --accent-tint: #11383C;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+    list-style-type: none;
+    padding: 5px;
+}
+
+body {
+    color: var(--ink);
+    margin-top: 0px;
+    margin-bottom: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.background {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(180deg, var(--ink-3) 0%, var(--ink-4) 10%, var(--divider) 40%, var(--surface), var(--bg) 90%, var(--bg));
+    background-size: 200% 200%;
+    background-position: 0% 0%;
+
+    transition: background-position 0.8s ease;
+    z-index: -1;
+}
+
+
+.background-image {
+  position: absolute;
+  /* place it wherever you want on the large background canvas */
+  bottom: -50%;
+  right: 40%;
+  width: 400px;
+  opacity: 1;
+  pointer-events: none;
+  transition: none; /* moves with the parent automatically */
+
+  transition: bottom 0.8s ease;
+}
+
+.background-image.shifted {
+    bottom: 100%;
+}
+
+.background.shifted {
+    background-position: 0% 100%;
+}
+
+.landing {
+    height: 100vh;
+    /* background-image: url('fih.png'); */
+    background-size: 500px;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    transition: transform 0.8s ease, opacity 0.8s ease;
+}
+
+.landing.slide-up {
+  transform: translateY(-100vh);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.landing-inputs {
+    display: flex;
+
+}
+
+.landing-inputs input {
+    width: 300px;
+    height: 40px;
+
+    border: none;
+    border-radius: 10px;
+
+    margin-top: 20px;
+    margin-right: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    
+    background-color: var(--ink-4);
+}
+
+.landing button {
+    height: 40px;
+    width: 150px;
+
+    margin: 20px;
+
+    background-color: var(--divider-strong);
+    color: var(--ink);
+    border: none;
+    border-radius: 10px;
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    background-color: var(--bg);
+    height: 100%;
+    width: 600px;
+    min-width: 350px;
+    max-width: 600px;
+    overflow-y: auto;
+    display: flex;
+    
+    border-right: 1px solid var(--divider);
+
+    animation: slide-in-left 0.6s ease 0.3s both;
+}
+
+.shifted {
+    background-position: 0% 100%;
+}
+
+/* Table of Content Sidebar */
+
+.sidebar-left {
+    width: 60px;
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 20px;
+
+    overflow-y: auto;
+    height: 100vh;
+
+    border-right: 1px solid var(--divider);
+}
+
+.locations-button, .cost-button, .day, .itinerary-folder {
+    min-height: 40px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+
+    margin-bottom: 15px;
+
+    background-color: var(--surface-2);
+}
+
+.itinerary-folder {
+    margin-bottom: 5px;
+}
+
+.day {
+    min-height: 35px;
+    width: 35px;
+    height: 35px;
+}
+
+.locations-button:hover, .cost-button:hover, .day:hover, .itinerary-folder:hover {
+    background-color: var(--surface-hover);
+    cursor: pointer;
+}
+
+.home {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--accent);
+}
+
+.home:hover {
+    background-color: var(--bg);
+    color: var(--accent);
+    cursor: pointer;
+}
+
+hr {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+    width: 100%;
+}
+
+.days-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 0px;
+    overflow: hidden;
+
+    border-radius: 10px;
+
+    background: linear-gradient(180deg, var(--surface-2), var(--bg));
+
+    transition: max-height 0.3s ease;
+} 
+
+.days-container.open {
+    max-height: 1000px;
+    background-color: var(--surface-2);
+}
+
+.arrow {
+    display: flex;
+    justify-content: center;
+    height: 20px;
+}
+
+/* Trip Info (Right Sidebar) */
+
+.sidebar-right-wrapper {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  min-width: 0; /* prevents flex blowout */
+}
+
+.sidebar-right {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 1;
+}
+
+.sidebar-right-wrapper .bubbles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.trip-info {
+    padding: 20px;
+    border-bottom: 1px solid var(--divider)
+}
+
+.trip-name-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.edit-icon {
+  color: var(--muted);
+  opacity: 1;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.trip-name-input {
+    height: 30px;
+    width: 100%;
+
+    padding: 5px;
+
+    font-weight: 800;
+
+    color: var(--ink);
+
+    border: none;
+    border-radius: 10px;
+    background-color: var(--surface);
+}
+
+.trip-location-time-container {
+    padding-top: 15px;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    color: var(--ink-2);
+}
+
+.stat-value {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.stats-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 15px;
+}
+
+.stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--ink-2);
+    background-color: var(--surface);
+}
+
+.locations-container, .cost-container, .itinerary-container {
+    padding: 15px;
+    height: auto;
+}
+
+.location-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.location-item:last-child {
+  border-bottom: none;
+}
+
+.location-index {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--amber);
+  color: var(--dark);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.location-name {
+  font-size: 13px;
+  color: var(--white);
+}
+
+.location-coords {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.empty-hint {
+  font-size: 12px;
+  color: var(--muted);
+  padding: 10px 0;
+}
+
+.day-card {
+    margin-top: 10px;
+    height: auto;
+}
+
+.cost {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.cost-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.cost-category {
+    width: 95%;
+}
+
+.cost-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    width: 95%;
+    height: 100px;
+    padding: 10px;
+    font-size: 18px;
+    margin: 10px;
+
+    border-radius: 10px;
+    background-color: var(--surface-2);
+}
+
+.cost-total {
+    margin: 10px;
+}
+
+.open-cost-btn {
+    width: 80%;
+    height: 30px;
+    margin-top: 10px;
+
+    border-radius: 10px;
+    border: none;
+
+    color: var(--ink);
+    background-color: var(--accent);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--surface-hover);
+  border-radius: 20px;
+  padding: 24px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 1001;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.modal-close:hover {
+  color: var(--white);
+}
+
+/* End Sidebar */
+
+.resize-handle {
+  width: 5px;
+  height: 100%;
+  background: transparent;
+  cursor: col-resize;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.resize-handle:hover {
+  background: var(--accent-hover);
+}
+
+/* Main Content */
+
+.main-content {
+    flex: 1;
+    height: 100%;
+    overflow-y: hidden;
+}
+
+.search-container {
+    width: 400px;
+    height: 40px;
+    margin: 20px;
+    margin-bottom: 15px;
+
+    display: flex;
+    flex-direction: column;
+
+    border-radius: 10px;
+    background-color: var(--surface);
+
+    z-index: 2000;
+    position: fixed;
+}
+
+.search-bar {
+    padding-left: 15px;
+    padding-top: 5px;
+    display: flex;
+    flex-direction: row;
+}
+
+.search-icon {
+    padding-top: 6px;
+}
+
+.search-box {
+    height: 30px;
+    width: 100%;
+
+    margin-left: 15px;
+    padding: 5px;
+
+    color: var(--ink-2);
+
+    border: none;
+    background-color: var(--surface);
+}
+
+.suggestions {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--surface-2);
+
+}
+
+/* Maps */
+
+.leaflet-tile-pane {
+  filter: sepia(0.8) hue-rotate(180deg) saturate(1) brightness(0.8);
+}
+
+.map-container {
+    flex: 1;
+    height: 100vh;
+}
+
+.leaflet-top.leaflet-left {
+  top: unset;
+  left: unset;
+  bottom: 20px;
+  right: 20px;
+}
+
+/* restyle the buttons */
+.leaflet-control-zoom {
+  border: none !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4) !important;
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+  background: var(--bg) !important;
+  color: var(--accent-hover) !important;
+  border: none !important;
+  border-bottom: 1px solid #3a3a48 !important;
+  font-size: 18px !important;
+  width: 36px !important;
+  height: 36px !important;
+  line-height: 36px !important;
+  transition: background 0.15s !important;
+}
+
+.leaflet-control-zoom-out {
+  border-bottom: none !important;
+}
+
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+  background: var(--accent-hover) !important;
+  color: var(--bg) !important;
+}
+
+/* Animations below */
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ── Location item ─────────────────────────────────────────────────────────── */
+.location-item {
+  border-bottom: 1px solid var(--border);
+  padding: 8px 0;
+}
+.location-item:last-child { border-bottom: none; }
+
+.location-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.location-drag {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.drag-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 9px;
+  padding: 1px 3px;
+  border-radius: 3px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.drag-btn:hover:not(:disabled) { color: var(--white); }
+.drag-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+
+.location-day-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #111;
+  flex-shrink: 0;
+}
+
+.location-info { flex: 1; min-width: 0; }
+.location-name { font-size: 13px; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.location-coords { font-size: 10px; color: var(--muted); }
+
+.location-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.location-remove {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 3px 5px;
+  border-radius: 3px;
+  transition: color 0.15s, background 0.15s;
+}
+.location-remove:hover { color: var(--red); background: rgba(224, 85, 85, 0.1); }
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 3px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s;
+}
+.icon-btn:hover { color: var(--white); }
+
+/* ── Location expanded ─────────────────────────────────────────────────────── */
+.location-expanded {
+  padding: 8px 12px;
+  background: var(--dark);
+  border-radius: 4px;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.location-full-name {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.day-assign {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.day-assign select {
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--white);
+  font-size: 12px;
+  padding: 3px 6px;
+  outline: none;
+  cursor: pointer;
+}
+
+/* ── Day card stops ────────────────────────────────────────────────────────── */
+.day-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.day-stop-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+}
+.day-stop-item:last-child { border-bottom: none; }
+
+.day-stop-num {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--panel2);
+  color: var(--muted);
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.day-stop-name {
+  font-size: 12px;
+  color: var(--white);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Suggestion detail ─────────────────────────────────────────────────────── */
+.suggestions li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.suggestion-name {
+  font-size: 13px;
+  color: var(--white);
+}
+
+.suggestion-detail {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── Empty hint ────────────────────────────────────────────────────────────── */
+.empty-hint {
+  font-size: 12px;
+  color: var(--muted);
+  padding: 8px 0;
+}
+
+.bubbles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -50px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.5),
+    rgba(200, 230, 255, 0.15) 50%,
+    rgba(100, 180, 255, 0.05) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+  animation: rise-wobble linear infinite;
+}
+
+@keyframes rise-wobble {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  10%  { opacity: var(--max-opacity, 0.8); }
+  25%  { transform: translate(15px, -25vh); }
+  50%  { transform: translate(-20px, -50vh); }
+  75%  { transform: translate(10px, -75vh); }
+  90%  { opacity: var(--max-opacity, 0.8); }
+  100% { transform: translate(0, -110vh); opacity: 0; }
+}
+
+.location-search {
+  position: relative;
+  width: 100%;
+}
+
+.location-search input {
+  width: 100%;
+}
+
+.landing-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.algae-container {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  pointer-events: none;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(to top, var(--dark) 20%, transparent);
+  margin-top: 20px;
+  flex-shrink: 0;
+  filter: grayscale(1);
+  opacity: 0.4;
+  overflow: hidden; /* add this */
+}
+
+.kelp-strand {
+  position: absolute;
+  bottom: 0;
+  width: 40px;
+  max-width: 40px; /* add this */
+  animation: kelp-sway ease-in-out infinite alternate;
+  transform-origin: bottom center;
+}
+
+@keyframes kelp-sway {
+  from { transform: rotate(-12deg) scaleX(0.95); }
+  to   { transform: rotate(12deg)  scaleX(1.05); }
+}

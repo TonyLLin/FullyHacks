@@ -1,0 +1,24 @@
+[
+  {
+    "id": "3e0e7b1b-6adf-42d7-85fa-fb69dbe89aa2",
+    "name": "Griffith Observatory",
+    "lat": 34.1184,
+    "lon": -118.3004,
+    "day": 1,
+    "order": 0,
+    "osm_id": null,
+    "osm_type": null,
+    "notes": ""
+  },
+  {
+    "id": "ca8b30e1-913b-4536-8999-f89869ca0856",
+    "name": "Times Square",
+    "lat": 40.757009,
+    "lon": -73.985972,
+    "day": 1,
+    "order": 1,
+    "osm_id": 14942838,
+    "osm_type": "relation",
+    "notes": ""
+  }
+]
